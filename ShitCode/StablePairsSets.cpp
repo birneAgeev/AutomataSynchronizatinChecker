@@ -12,12 +12,12 @@ namespace {
 	}
 
 	std::vector<AutomataStatesPair> BuildALittleBitStablePairs(const Graph& graph, const AutomataStatesPair& stablePair, const std::vector<int>& letters) {
-		int k = 6; // [1/2e] + 1, where 0 < e < 0.125
+		size_t k = 6; // [1/2e] + 1, where 0 < e < 0.125
 		std::set<AutomataStatesPair> ans;
 		auto cur = stablePair;
 
 		int letter = -1;
-		for (int i = 0; i < letters.size(); ++i) {
+		for (size_t i = 0; i < letters.size(); ++i) {
 			int c = letters[i];
 			if (c != stablePair.GetDependLetter()) {
 				letter = c;
@@ -25,7 +25,7 @@ namespace {
 			}
 		}
 
-		for (int i = 0; i < k; ++i) {
+		for (size_t i = 0; i < k; ++i) {
 			cur = cur.GetNext(graph, letter);
 
 			if (cur.GetP() == cur.GetQ())
@@ -39,7 +39,7 @@ namespace {
 
 	std::vector<AutomataStatesPair> BuildStablePairs(const Graph& graph, const std::vector<AutomataStatesPair>& stablePairs, int dependLetter) {
 		auto n = graph.size();
-		int stablePairsCount = int(pow(double(n), 0.4));
+		size_t stablePairsCount = size_t(pow(double(n), 0.4));
 
 		for (const auto& pair : stablePairs) {
 			std::set<AutomataStatesPair> ans;

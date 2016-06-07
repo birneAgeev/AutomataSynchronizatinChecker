@@ -31,9 +31,8 @@ namespace Utils {
 
 	inline void PrintInGraphViz(const Graph& graph, const std::string& fileName) {
 		std::string dot = "digraph G{\n";
-		for (int i = 0; i < graph.size(); ++i) {
-			;
-			for (int j = 0; j < graph[i].size(); ++j) {
+		for (size_t i = 0; i < graph.size(); ++i) {
+			for (size_t j = 0; j < graph[i].size(); ++j) {
 				std::string edgeLabel = "";
 				edgeLabel += j + 'a';
 

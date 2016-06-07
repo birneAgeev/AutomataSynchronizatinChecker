@@ -20,7 +20,7 @@ namespace {
 
 			if (cluster.cycleLength > 2) {
 				int tbCount = 0;
-				for (int j = 0; j < cluster.cycleStates.size(); ++j) {
+				for (size_t j = 0; j < cluster.cycleStates.size(); ++j) {
 					int p = cluster.cycleStates[j];
 
 					if (!clusterStructureB.IsBigCluster(clusterStructureB.GetVertexInfos()[p].clusterIndex))
@@ -72,7 +72,7 @@ namespace {
 
 	std::vector<int> MoveSetByLetter(const Graph& graph, const std::vector<int>& states, int letter) {
 		std::vector<int> ans;
-		for (int i = 0; i < states.size(); ++i) {
+		for (size_t i = 0; i < states.size(); ++i) {
 			ans.push_back(graph[states[i]][letter]);
 		}
 
@@ -92,7 +92,7 @@ namespace {
 		std::vector<bool> Ip(d);
 		for (int i = 0; i < d; ++i) {
 			bool indexIsGood = true;
-			for (int k = 0; k < cluster.cycleLength / d; ++k) {
+			for (size_t k = 0; k < cluster.cycleLength / d; ++k) {
 				int state = cluster.cycleStates[(i + k * d) % cluster.cycleLength];
 
 				if (clusterStructure.IsBigCluster(clusterStructure.GetVertexInfos()[state].clusterIndex)) {
@@ -177,7 +177,7 @@ namespace {
 		ClusterStructure clusterStructureWithSingleHighestTree;
 		bool appropriateClusterStructureFound = false;
 		int clusterCountThreshold = int(5.0 * log(n));
-		for (int i = 0; i < letters.size(); ++i) {
+		for (size_t i = 0; i < letters.size(); ++i) {
 			int letter = letters[i];
 			auto clusterStructure = ClusterStructure(graph, letter);
 			clusterStructures.push_back(clusterStructure);
@@ -199,7 +199,7 @@ namespace {
 		auto stablePair = clusterStructureWithSingleHighestTree.GetStablePair();
 		auto stablePairsSets = StablePairsSets(graph, stablePair, letters);
 
-		for (int i = 0; i < letters.size(); ++i) {
+		for (size_t i = 0; i < letters.size(); ++i) {
 			int letter = letters[i];
 			auto clusterStructure = clusterStructures[i];
 			auto stablePairs = stablePairsSets.GetStablePairs(letter);

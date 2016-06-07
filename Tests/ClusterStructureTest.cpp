@@ -3,6 +3,8 @@
 #include "Utils.h"
 #include "../ShitCode/ClusterGraph.h"
 #include "../ShitCode/CondensationBuilder.h"
+#include "../ShitCode/Utils.h"
+#include "../ShitCode/AutomataStatesPair.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 

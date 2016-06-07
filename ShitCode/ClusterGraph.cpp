@@ -6,7 +6,7 @@ ClusterGraph::ClusterGraphEdge::ClusterGraphEdge(int toCluster, int fromVertex, 
 void ClusterGraph::dfs(int v, std::vector<int>& coloring, std::vector<bool>& used, int d) {
 	used[v] = true;
 
-	for (int i = 0; i < adjacencyList[v].size(); ++i) {
+	for (size_t i = 0; i < adjacencyList[v].size(); ++i) {
 		int to = adjacencyList[v][i].toCluster;
 
 		if (used[to])
@@ -26,7 +26,7 @@ void ClusterGraph::dfs(int v, std::vector<int>& coloring, std::vector<bool>& use
 ClusterGraph::ClusterGraph(const ClusterStructure& clusterStructure, const std::vector<AutomataStatesPair>& stablePairs): clusterStructure(clusterStructure), stablePairs(stablePairs) {
 	adjacencyList.resize(clusterStructure.GetClusterCount());
 
-	for (int i = 0; i < stablePairs.size(); ++i) {
+	for (size_t i = 0; i < stablePairs.size(); ++i) {
 		auto stablePair = stablePairs[i];
 		int pCluster = clusterStructure.GetVertexInfos()[stablePair.GetP()].clusterIndex;
 		int qCluster = clusterStructure.GetVertexInfos()[stablePair.GetQ()].clusterIndex;
@@ -58,12 +58,12 @@ bool ClusterGraph::IsColoringExists() {
 
 	dfs(0, coloring, used, d);
 
-	for (int i = 0; i < n; ++i) {
+	for (size_t i = 0; i < n; ++i) {
 		if (!used[i])
 			return false;
 	}
 
-	for (int i = 0; i < stablePairs.size(); ++i) {
+	for (size_t i = 0; i < stablePairs.size(); ++i) {
 		int p = stablePairs[i].GetP();
 		int q = stablePairs[i].GetQ();
 

@@ -7,7 +7,7 @@ int ClusterStructure::TreeDfs(int v, std::vector<bool>& used, int root, int clus
 	vertexInfos[v] = VertexClusterInfo(clusterIndex, root, height);
 	int ans = height;
 
-	for (int i = 0; i < invertedSingleLetterGraph[v].size(); ++i) {
+	for (size_t i = 0; i < invertedSingleLetterGraph[v].size(); ++i) {
 		int to = invertedSingleLetterGraph[v][i];
 		if (used[to])
 			continue;
@@ -57,7 +57,7 @@ ClusterStructure::ClusterStructure(const Graph& graph, int letter) {
 
 	dependLetter = letter;
 
-	for (int i = 0; i < n; ++i) {
+	for (size_t i = 0; i < n; ++i) {
 		singleLetterGraph[i] = graph[i][letter];
 		invertedSingleLetterGraph[graph[i][letter]].push_back(i);
 	}
@@ -65,7 +65,7 @@ ClusterStructure::ClusterStructure(const Graph& graph, int letter) {
 	std::vector<bool> used(n, false);
 	std::vector<bool> isCycleState(n, false);
 	clusterCount = 0;
-	for (int p = 0; p < n; ++p) {
+	for (size_t p = 0; p < n; ++p) {
 		if (used[p])
 			continue;
 
@@ -102,11 +102,11 @@ ClusterStructure::ClusterStructure(const Graph& graph, int letter) {
 		}
 
 		//run dfs from all lvl1 states in the inverted graph
-		for (int i = 0; i < cycleStates.size(); ++i) {
+		for (size_t i = 0; i < cycleStates.size(); ++i) {
 			int root = cycleStates[i];
 			vertexInfos[root] = VertexClusterInfo(clusterCount, root, -1);
 			int previousInCycle = cycleStates[i - 1 < 0 ? cycleStates.size() - 1 : i - 1];
-			for (int j = 0; j < invertedSingleLetterGraph[root].size(); ++j) {
+			for (size_t j = 0; j < invertedSingleLetterGraph[root].size(); ++j) {
 				int q = invertedSingleLetterGraph[root][j];
 				if (isCycleState[q])
 					continue;
@@ -149,7 +149,7 @@ bool ClusterStructure::IsSingleHighestTree() const {
 
 bool ClusterStructure::DoesHighestOneCrownIntersectsWithCondensationMinComponent(Condensation& condensation) const {
 	auto n = singleLetterGraph.size();
-	for (int i = 0; i < n; ++i) {
+	for (size_t i = 0; i < n; ++i) {
 		if (vertexInfos[i].height > secondHighestTreeHeight && condensation.initialVerticiesColoring[i] == condensation.GetMinComponentIndex())
 			return true;
 	}
@@ -167,6 +167,6 @@ bool ClusterStructure::IsVertexInBigCluster(int v) const {
 
 bool ClusterStructure::IsBigCluster(int index) const {
 	auto n = singleLetterGraph.size();
-	int clusterSizeThreshold = int(pow(double(n), 0.45));
+	size_t clusterSizeThreshold = size_t(pow(double(n), 0.45));
 	return clusterInfos[index].clusterSize > clusterSizeThreshold;
 }

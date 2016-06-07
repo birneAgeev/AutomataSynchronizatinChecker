@@ -6,7 +6,7 @@ Condensation::Condensation(const Graph& condensation, const std::vector<int>& in
 
 bool Condensation::IsSingleMin() const {
 	int minCount = 0;
-	for (int i = 0; i < condensation.size(); ++i) {
+	for (size_t i = 0; i < condensation.size(); ++i) {
 		if (condensation[i].size() == 0)
 			++minCount;
 	}
@@ -17,7 +17,7 @@ int Condensation::GetMinComponentIndex() {
 	if (minComponentIndex != -1)
 		return minComponentIndex;
 
-	for (int i = 0; i < condensation.size(); ++i) {
+	for (size_t i = 0; i < condensation.size(); ++i) {
 		if (condensation[i].size() == 0)
 			minComponentIndex = i;
 	}

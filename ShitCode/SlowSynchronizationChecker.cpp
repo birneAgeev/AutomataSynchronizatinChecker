@@ -6,8 +6,8 @@ namespace {
 		Graph invertedSquaredAutomaton;
 		invertedSquaredAutomaton.resize(n * n);
 
-		for (auto i = 0; i < n; ++i) {
-			for (auto j = 0; j < n; ++j) {
+		for (size_t i = 0; i < n; ++i) {
+			for (size_t j = 0; j < n; ++j) {
 				auto v = i * n + j;
 
 				for (auto c = 0; c < sigma; ++c) {
@@ -38,16 +38,16 @@ bool SlowSynchronizationChecker::IsSynchronizableSlow(const Graph& graph, int si
 
 	used.assign(n * n, false);
 	std::vector<int> q;
-	for (int i = 0; i < n; ++i) {
+	for (size_t i = 0; i < n; ++i) {
 		q.push_back(int(i * n + i));
 		used[i * n + i] = true;
 	}
-	int l = 0;
+	size_t l = 0;
 
 	while (l < q.size()) {
 		int v = q[l++];
 
-		for (int i = 0; i < invertedSquaredAutomaton[v].size(); ++i) {
+		for (size_t i = 0; i < invertedSquaredAutomaton[v].size(); ++i) {
 			int to = invertedSquaredAutomaton[v][i];
 
 			if (used[to])
@@ -58,7 +58,7 @@ bool SlowSynchronizationChecker::IsSynchronizableSlow(const Graph& graph, int si
 		}
 	}
 
-	for (int i = 0; i < used.size(); ++i) {
+	for (size_t i = 0; i < used.size(); ++i) {
 		if (!used[i])
 			return false;
 	}

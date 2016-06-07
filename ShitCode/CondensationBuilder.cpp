@@ -6,8 +6,8 @@ namespace{
 		Graph invertedGraph;
 
 		invertedGraph.resize(graph.size());
-		for (int i = 0; i < graph.size(); ++i) {
-			for (int j = 0; j < letters.size(); ++j) {
+		for (size_t i = 0; i < graph.size(); ++i) {
+			for (size_t j = 0; j < letters.size(); ++j) {
 				int letter = letters[j];
 				invertedGraph[graph[i][letter]].push_back(i);
 			}
@@ -19,7 +19,7 @@ namespace{
 	void OrderDfs(const Graph& graph, const std::vector<int>& letters, int v, std::vector<bool>& used, std::vector<int>& order) {
 		used[v] = true;
 
-		for (int i = 0; i < letters.size(); ++i) {
+		for (size_t i = 0; i < letters.size(); ++i) {
 			int letter = letters[i];
 			int to = graph[v][letter];
 
@@ -34,7 +34,7 @@ namespace{
 		used[v] = true;
 		cluster[v] = clusterNumber;
 
-		for (int i = 0; i < graph[v].size(); ++i) {
+		for (size_t i = 0; i < graph[v].size(); ++i) {
 			int to = graph[v][i];
 
 			if (used[to])
@@ -61,7 +61,7 @@ Condensation CondensationBuilder::BuildCondensation(const Graph& graph, const st
 	order.resize(0);
 
 	used.assign(n, false);
-	for (int i = 0; i < n; ++i) {
+	for (size_t i = 0; i < n; ++i) {
 		if (!used[i])
 			OrderDfs(graph, letters, i, used, order);
 	}
@@ -71,15 +71,15 @@ Condensation CondensationBuilder::BuildCondensation(const Graph& graph, const st
 	used.assign(n, false);
 	cluster.assign(n, -1);
 	int clusterNumber = 0;
-	for (int i = 0; i < n; ++i) {
+	for (size_t i = 0; i < n; ++i) {
 		int v = order[i];
 		if (!used[v])
 			ClusterDfs(invertedGraph, v, used, cluster, clusterNumber++);
 	}
 
 	condensation.resize(clusterNumber);
-	for (int v = 0; v < n; ++v) {
-		for (int i = 0; i < letters.size(); ++i) {
+	for (size_t v = 0; v < n; ++v) {
+		for (size_t i = 0; i < letters.size(); ++i) {
 			int letter = letters[i];
 			int to = graph[v][letter];
 

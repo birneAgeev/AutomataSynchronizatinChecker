@@ -11,7 +11,7 @@ namespace Microsoft {
 			template <>
 			static std::wstring ToString<std::vector<int>>(const std::vector<int>& a) {
 				std::wstring ans;
-				for (int i = 0; i < a.size(); ++i) {
+				for (size_t i = 0; i < a.size(); ++i) {
 					ans += std::to_wstring(a[i]) + (i != a.size() - 1 ? L", " : L"");
 				}
 				return ans;

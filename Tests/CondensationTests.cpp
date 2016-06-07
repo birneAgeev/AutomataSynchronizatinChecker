@@ -1,12 +1,12 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
-#include "../ShitCode/ClusterGraph.h"
 #include "../ShitCode/CondensationBuilder.h"
 #include "Utils.h"
+#include "../ShitCode/Utils.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-#define DEBUG_PRINT
+//#define DEBUG_PRINT
 
 namespace Tests {
 	TEST_CLASS(CondensationTests) {
@@ -30,7 +30,6 @@ namespace Tests {
 			Assert::AreEqual(condensation.initialVerticiesColoring, std::vector<int>{5, 5, 5, 4, 4, 4, 4, 3, 2, 1, 0});
 			Assert::IsTrue(condensation.IsSingleMin());
 			Assert::AreEqual(condensation.GetMinComponentIndex(), 5);
-			Assert::AreEqual(condensation.GetMinComponentSize(), 3);
 		}
 
 		TEST_METHOD(TestNonConnectedGraph) {
@@ -38,7 +37,7 @@ namespace Tests {
 			int sigma;
 			Utils::ReadAutomaton(g, sigma, resourcePath + "nonConnectedGraph.txt");
 
-			std::vector<int> letters{ 0, 1 };
+			std::vector<int> letters{0, 1};
 			auto condensation = CondensationBuilder::GetInstance().BuildCondensation(g, letters);
 
 #ifdef DEBUG_PRINT
@@ -55,7 +54,7 @@ namespace Tests {
 			int sigma;
 			Utils::ReadAutomaton(g, sigma, resourcePath + "connectedMultipleMinGraph.txt");
 
-			std::vector<int> letters{ 0, 1 };
+			std::vector<int> letters{0, 1};
 			auto condensation = CondensationBuilder::GetInstance().BuildCondensation(g, letters);
 
 #ifdef DEBUG_PRINT
