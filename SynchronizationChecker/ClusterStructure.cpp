@@ -26,7 +26,7 @@ ClusterStructure::VertexClusterInfo::VertexClusterInfo(int clusterIndex, int tre
 	clusterIndex(clusterIndex), treeIndex(treeIndex), height(height) { }
 
 ClusterStructure::ClusterInfo::ClusterInfo():
-	clusterSize(-1), cycleLength(-1), cycleStates(std::vector<int>()) { }
+	clusterSize(0), cycleLength(0), cycleStates(std::vector<int>()) { }
 
 ClusterStructure::ClusterInfo::ClusterInfo(int clusterSize, int cycleLength):
 	clusterSize(clusterSize), cycleLength(cycleLength) { }
@@ -105,7 +105,7 @@ ClusterStructure::ClusterStructure(const Graph& graph, int letter) {
 		for (size_t i = 0; i < cycleStates.size(); ++i) {
 			int root = cycleStates[i];
 			vertexInfos[root] = VertexClusterInfo(clusterCount, root, -1);
-			int previousInCycle = cycleStates[i - 1 < 0 ? cycleStates.size() - 1 : i - 1];
+			int previousInCycle = cycleStates[int(i) - 1 < 0 ? cycleStates.size() - 1 : i - 1];
 			for (size_t j = 0; j < invertedSingleLetterGraph[root].size(); ++j) {
 				int q = invertedSingleLetterGraph[root][j];
 				if (isCycleState[q])
