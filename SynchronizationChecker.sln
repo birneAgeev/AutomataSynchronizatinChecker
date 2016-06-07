@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ShitCode", "ShitCode\ShitCode.vcxproj", "{F879566C-CF6D-4BA3-861B-746C945FA24C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SynchronizationChecker", "SynchronizationChecker\SynchronizationChecker.vcxproj", "{F879566C-CF6D-4BA3-861B-746C945FA24C}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tests", "Tests\Tests.vcxproj", "{EEEAF2BB-D64D-4B78-B677-7D3F806BD4B9}"
 EndProject

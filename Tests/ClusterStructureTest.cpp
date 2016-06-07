@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
 #include "Utils.h"
-#include "../ShitCode/ClusterGraph.h"
-#include "../ShitCode/CondensationBuilder.h"
-#include "../ShitCode/Utils.h"
-#include "../ShitCode/AutomataStatesPair.h"
+#include "../SynchronizationChecker/ClusterGraph.h"
+#include "../SynchronizationChecker/CondensationBuilder.h"
+#include "../SynchronizationChecker/Utils.h"
+#include "../SynchronizationChecker/AutomataStatesPair.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 

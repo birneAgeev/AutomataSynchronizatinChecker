@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
-#include "../ShitCode/CondensationBuilder.h"
+#include "../SynchronizationChecker/CondensationBuilder.h"
 #include "Utils.h"
-#include "../ShitCode/Utils.h"
+#include "../SynchronizationChecker/Utils.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
