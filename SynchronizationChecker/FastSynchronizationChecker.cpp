@@ -8,12 +8,6 @@
 #include "ClusterGraph.h"
 
 namespace {
-	enum FastSynchrinizationTestResult {
-		DontKnow = 0,
-		Synchronizable = 1,
-		NonSynchronizable = 2
-	};
-
 	bool CheckTheorem2Case1(const Graph& graph, const ClusterStructure& clusterStructureA, const ClusterStructure& clusterStructureB, const std::vector<int>& letters) {
 		for (int i = 0; i < clusterStructureA.GetClusterCount(); ++i) {
 			auto cluster = clusterStructureA.GetClusterInfos()[i];
@@ -161,59 +155,58 @@ namespace {
 
 		return true;
 	}
+}
 
+FastSynchrinizationTestResult FastSynchronizationChecker::IsSynchronizableFast(const Graph& graph, const std::vector<int>& letters) const{
+	if (letters.size() != 2)
+		throw std::runtime_error("Expected two-letter automata.");
 
-	FastSynchrinizationTestResult IsSynchronizableFast(const Graph& graph, const std::vector<int>& letters) {
-		if (letters.size() != 2)
-			throw std::runtime_error("Expected two-letter automata.");
+	auto n = graph.size();
+	auto condensation = CondensationBuilder::GetInstance().BuildCondensation(graph, letters);
 
-		auto n = graph.size();
-		auto condensation = CondensationBuilder::GetInstance().BuildCondensation(graph, letters);
+	if (!condensation.IsSingleMin())
+		return FastSynchrinizationTestResult::NonSynchronizable;
 
-		if (!condensation.IsSingleMin())
-			return FastSynchrinizationTestResult::NonSynchronizable;
+	std::vector<ClusterStructure> clusterStructures;
+	ClusterStructure clusterStructureWithSingleHighestTree;
+	bool appropriateClusterStructureFound = false;
+	int clusterCountThreshold = int(5.0 * log(n));
+	for (size_t i = 0; i < letters.size(); ++i) {
+		int letter = letters[i];
+		auto clusterStructure = ClusterStructure(graph, letter);
+		clusterStructures.push_back(clusterStructure);
 
-		std::vector<ClusterStructure> clusterStructures;
-		ClusterStructure clusterStructureWithSingleHighestTree;
-		bool appropriateClusterStructureFound = false;
-		int clusterCountThreshold = int(5.0 * log(n));
-		for (size_t i = 0; i < letters.size(); ++i) {
-			int letter = letters[i];
-			auto clusterStructure = ClusterStructure(graph, letter);
-			clusterStructures.push_back(clusterStructure);
-
-			if (clusterStructure.GetClusterCount() > clusterCountThreshold)
-				return FastSynchrinizationTestResult::DontKnow;
-
-			if (clusterStructure.IsSingleHighestTree() &&
-				clusterStructure.DoesHighestOneCrownIntersectsWithCondensationMinComponent(condensation)) {
-
-				clusterStructureWithSingleHighestTree = clusterStructure;
-				appropriateClusterStructureFound = true;
-			}
-		}
-
-		if (!appropriateClusterStructureFound)
+		if (clusterStructure.GetClusterCount() > clusterCountThreshold)
 			return FastSynchrinizationTestResult::DontKnow;
 
-		auto stablePair = clusterStructureWithSingleHighestTree.GetStablePair();
-		auto stablePairsSets = StablePairsSets(graph, stablePair, letters);
+		if (clusterStructure.IsSingleHighestTree() &&
+			clusterStructure.DoesHighestOneCrownIntersectsWithCondensationMinComponent(condensation)) {
 
-		for (size_t i = 0; i < letters.size(); ++i) {
-			int letter = letters[i];
-			auto clusterStructure = clusterStructures[i];
-			auto stablePairs = stablePairsSets.GetStablePairs(letter);
-			auto clusterGraph = ClusterGraph(clusterStructure, stablePairs);
-
-			if (clusterGraph.IsColoringExists())
-				return FastSynchrinizationTestResult::DontKnow;
+			clusterStructureWithSingleHighestTree = clusterStructure;
+			appropriateClusterStructureFound = true;
 		}
-
-		if (!CheckTheorem2Case1(graph, clusterStructures[0], clusterStructures[1], letters) || !CheckTheorem2Case2(graph, clusterStructures[0], clusterStructures[1], letters))
-			return FastSynchrinizationTestResult::DontKnow;
-
-		return FastSynchrinizationTestResult::Synchronizable;
 	}
+
+	if (!appropriateClusterStructureFound)
+		return FastSynchrinizationTestResult::DontKnow;
+
+	auto stablePair = clusterStructureWithSingleHighestTree.GetStablePair();
+	auto stablePairsSets = StablePairsSets(graph, stablePair, letters);
+
+	for (size_t i = 0; i < letters.size(); ++i) {
+		int letter = letters[i];
+		auto clusterStructure = clusterStructures[i];
+		auto stablePairs = stablePairsSets.GetStablePairs(letter);
+		auto clusterGraph = ClusterGraph(clusterStructure, stablePairs);
+
+		if (clusterGraph.IsColoringExists())
+			return FastSynchrinizationTestResult::DontKnow;
+	}
+
+	if (!CheckTheorem2Case1(graph, clusterStructures[0], clusterStructures[1], letters) || !CheckTheorem2Case2(graph, clusterStructures[0], clusterStructures[1], letters))
+		return FastSynchrinizationTestResult::DontKnow;
+
+	return FastSynchrinizationTestResult::Synchronizable;
 }
 
 FastSynchronizationChecker::FastSynchronizationChecker() {}
@@ -227,7 +220,7 @@ bool FastSynchronizationChecker::IsSynchronizableFast(const Graph& graph, int si
 	for (int i = 0; i + 1 < sigma; i += 2) {
 		std::vector<int> letters{i, i + 1};
 
-		auto twoLettersResult = ::IsSynchronizableFast(graph, letters);
+		auto twoLettersResult = FastSynchronizationChecker::IsSynchronizableFast(graph, letters);
 
 		if (twoLettersResult == FastSynchrinizationTestResult::Synchronizable)
 			return true;
