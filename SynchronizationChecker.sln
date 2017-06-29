@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SynchronizationChecker", "SynchronizationChecker\SynchronizationChecker.vcxproj", "{F879566C-CF6D-4BA3-861B-746C945FA24C}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gen", "gen\gen.vcxproj", "{A494611D-E5F2-4BCA-85C0-4F120A725AF7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -27,6 +29,15 @@ Global
 		{F879566C-CF6D-4BA3-861B-746C945FA24C}.x64|Win32.Build.0 = x64|Win32
 		{F879566C-CF6D-4BA3-861B-746C945FA24C}.x64|x64.ActiveCfg = Release|x64
 		{F879566C-CF6D-4BA3-861B-746C945FA24C}.x64|x64.Build.0 = Release|x64
+		{A494611D-E5F2-4BCA-85C0-4F120A725AF7}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A494611D-E5F2-4BCA-85C0-4F120A725AF7}.Debug|Win32.Build.0 = Debug|Win32
+		{A494611D-E5F2-4BCA-85C0-4F120A725AF7}.Debug|x64.ActiveCfg = Debug|Win32
+		{A494611D-E5F2-4BCA-85C0-4F120A725AF7}.Release|Win32.ActiveCfg = Release|Win32
+		{A494611D-E5F2-4BCA-85C0-4F120A725AF7}.Release|Win32.Build.0 = Release|Win32
+		{A494611D-E5F2-4BCA-85C0-4F120A725AF7}.Release|x64.ActiveCfg = Release|Win32
+		{A494611D-E5F2-4BCA-85C0-4F120A725AF7}.x64|Win32.ActiveCfg = Release|Win32
+		{A494611D-E5F2-4BCA-85C0-4F120A725AF7}.x64|Win32.Build.0 = Release|Win32
+		{A494611D-E5F2-4BCA-85C0-4F120A725AF7}.x64|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
