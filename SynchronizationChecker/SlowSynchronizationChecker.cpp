@@ -1,10 +1,10 @@
 ﻿#include "SlowSynchronizationChecker.h"
+#include "MultiListGraph.h"
 
 namespace {
-	Graph BuildInvertedSquaredAutomaton(const Graph& graph, int sigma) {
+	MultiListGraph BuildInvertedSquaredAutomaton(const Graph& graph, int sigma) {
 		auto n = graph.size();
-		Graph invertedSquaredAutomaton;
-		invertedSquaredAutomaton.assign(n * n, std::vector<int>(sigma));
+		MultiListGraph invertedSquaredAutomaton(n * n, n * n * sigma);
 
 		for (size_t i = 0; i < n; ++i) {
 			for (size_t j = 0; j < n; ++j) {
@@ -15,7 +15,7 @@ namespace {
 					auto toJ = graph[j][c];
 
 					auto to = toI * n + toJ;
-					invertedSquaredAutomaton[to].push_back(int(v));
+					invertedSquaredAutomaton.AddEdge(to, v);
 				}
 			}
 		}
@@ -46,8 +46,9 @@ bool SlowSynchronizationChecker::IsSynchronizableSlow(const Graph& graph, int si
 	while (l < q.size()) {
 		int v = q[l++];
 
-		for (size_t i = 0; i < invertedSquaredAutomaton[v].size(); ++i) {
-			int to = invertedSquaredAutomaton[v][i];
+		for (auto it = invertedSquaredAutomaton.GetVertexAdjacencyListBegin(v); it != invertedSquaredAutomaton.GetVertexAdjacencyListEnd(); ++it)
+		{
+			int to = *it;
 
 			if (used[to])
 				continue;

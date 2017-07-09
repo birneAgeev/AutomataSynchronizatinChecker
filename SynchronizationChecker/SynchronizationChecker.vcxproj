@@ -94,6 +94,10 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>gen.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <DelayLoadDLLs>%(DelayLoadDLLs)</DelayLoadDLLs>
+      <AdditionalLibraryDirectories>C:\MyDocuments\Study\SynchronizationChecker\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -150,12 +154,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AdjacencyListIterator.cpp" />
     <ClCompile Include="AutomataStatesPair.cpp" />
     <ClCompile Include="ClusterGraph.cpp" />
     <ClCompile Include="ClusterStructure.cpp" />
     <ClCompile Include="Condensation.cpp" />
     <ClCompile Include="CondensationBuilder.cpp" />
     <ClCompile Include="FastSynchronizationChecker.cpp" />
+    <ClCompile Include="MultiListGraph.cpp" />
     <ClCompile Include="SlowSynchronizationChecker.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="StablePairsSets.cpp" />
@@ -164,12 +170,14 @@
     <Text Include="input.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AdjacencyListIterator.h" />
     <ClInclude Include="AutomataStatesPair.h" />
     <ClInclude Include="ClusterGraph.h" />
     <ClInclude Include="ClusterStructure.h" />
     <ClInclude Include="Condensation.h" />
     <ClInclude Include="CondensationBuilder.h" />
     <ClInclude Include="FastSynchronizationChecker.h" />
+    <ClInclude Include="MultiListGraph.h" />
     <ClInclude Include="SlowSynchronizationChecker.h" />
     <ClInclude Include="StablePairsSets.h" />
     <ClInclude Include="TypesDeclarations.h" />
