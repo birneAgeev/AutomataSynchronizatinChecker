@@ -7,8 +7,8 @@ int ClusterStructure::TreeDfs(int v, std::vector<bool>& used, int root, int clus
 	vertexInfos[v] = VertexClusterInfo(clusterIndex, root, height);
 	int ans = height;
 
-	for (size_t i = 0; i < invertedSingleLetterGraph[v].size(); ++i) {
-		int to = invertedSingleLetterGraph[v][i];
+	for (auto it = invertedSingleLetterGraph.GetVertexAdjacencyListBegin(v); it != invertedSingleLetterGraph.GetVertexAdjacencyListEnd(); ++it) {
+		int to = *it;
 		if (used[to])
 			continue;
 
@@ -31,11 +31,10 @@ ClusterStructure::ClusterInfo::ClusterInfo():
 ClusterStructure::ClusterInfo::ClusterInfo(int clusterSize, int cycleLength):
 	clusterSize(clusterSize), cycleLength(cycleLength) { }
 
-ClusterStructure::ClusterStructure() {
+ClusterStructure::ClusterStructure() : invertedSingleLetterGraph(0, 0){
 	vertexInfos = std::vector<VertexClusterInfo>();
 	clusterInfos = std::vector<ClusterInfo>();
 	singleLetterGraph = std::vector<int>();
-	invertedSingleLetterGraph = std::vector<std::vector<int>>();
 	clusterCount = 0;
 	highestTreeHeight = -1;
 	secondHighestTreeHeight = -1;
@@ -44,10 +43,10 @@ ClusterStructure::ClusterStructure() {
 	dependLetter = -1;
 }
 
-ClusterStructure::ClusterStructure(const Graph& graph, int letter) {
+ClusterStructure::ClusterStructure(const Graph& graph, int letter) : invertedSingleLetterGraph(graph.size(), graph.size()) {
 	auto n = graph.size();
 	singleLetterGraph.resize(n);
-	invertedSingleLetterGraph.resize(n);
+	invertedSingleLetterGraph = MultiListGraph(n, n);
 	vertexInfos.resize(n);
 
 	highestTreeHeight = -1;
@@ -59,19 +58,23 @@ ClusterStructure::ClusterStructure(const Graph& graph, int letter) {
 
 	for (size_t i = 0; i < n; ++i) {
 		singleLetterGraph[i] = graph[i][letter];
-		invertedSingleLetterGraph[graph[i][letter]].push_back(i);
+		invertedSingleLetterGraph.AddEdge(graph[i][letter], i);
 	}
 
 	std::vector<bool> used(n, false);
 	std::vector<bool> isCycleState(n, false);
 	clusterCount = 0;
+	std::vector<int> stack;
+	stack.reserve(n);
+	std::vector<int> cycleStates;
+	cycleStates.reserve(n);
 	for (size_t p = 0; p < n; ++p) {
 		if (used[p])
 			continue;
 
 		auto currentClusterInfo = ClusterInfo();
 
-		std::vector<int> stack;
+		stack.clear();
 		int cur = p;
 		while (!used[cur]) {
 			used[cur] = true;
@@ -79,7 +82,7 @@ ClusterStructure::ClusterStructure(const Graph& graph, int letter) {
 			cur = singleLetterGraph[cur];
 		}
 
-		std::vector<int> cycleStates;
+		cycleStates.clear();
 		int last = cur;
 
 		while (!stack.empty() && stack.back() != last) {
@@ -106,8 +109,8 @@ ClusterStructure::ClusterStructure(const Graph& graph, int letter) {
 			int root = cycleStates[i];
 			vertexInfos[root] = VertexClusterInfo(clusterCount, root, -1);
 			int previousInCycle = cycleStates[int(i) - 1 < 0 ? cycleStates.size() - 1 : i - 1];
-			for (size_t j = 0; j < invertedSingleLetterGraph[root].size(); ++j) {
-				int q = invertedSingleLetterGraph[root][j];
+			for (auto it = invertedSingleLetterGraph.GetVertexAdjacencyListBegin(root); it != invertedSingleLetterGraph.GetVertexAdjacencyListEnd(); ++it) {
+				int q = *it;
 				if (isCycleState[q])
 					continue;
 

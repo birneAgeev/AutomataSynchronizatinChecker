@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "AutomataStatesPair.h"
 #include "Condensation.h"
+#include "MultiListGraph.h"
 
 class ClusterStructure {
 public:
@@ -12,7 +13,7 @@ private:
 	std::vector<ClusterInfo> clusterInfos;
 	int clusterCount;
 	std::vector<int> singleLetterGraph;
-	std::vector<std::vector<int>> invertedSingleLetterGraph;
+	MultiListGraph invertedSingleLetterGraph;
 
 	int highestTreeRootCyclePredecessor;
 	int highestTreeRoot;

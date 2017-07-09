@@ -15,8 +15,8 @@ public:
 
 	void AddEdge(int v, int to);
 
-	AdjacencyListIterator GetVertexAdjacencyListBegin(int v);
+	AdjacencyListIterator GetVertexAdjacencyListBegin(int v) const;
 
-	AdjacencyListIterator GetVertexAdjacencyListEnd();
+	AdjacencyListIterator GetVertexAdjacencyListEnd() const;
 };
 

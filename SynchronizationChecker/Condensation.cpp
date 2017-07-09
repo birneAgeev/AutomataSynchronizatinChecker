@@ -1,13 +1,13 @@
 ﻿#include "Condensation.h"
 
-Condensation::Condensation(const Graph& condensation, const std::vector<int>& initialVerticiesColoring): condensation(condensation), initialVerticiesColoring(initialVerticiesColoring) {
+Condensation::Condensation(const std::vector<int>& condensation, const std::vector<int>& initialVerticiesColoring): condensation(condensation), initialVerticiesColoring(initialVerticiesColoring) {
 	minComponentIndex = -1;
 }
 
 bool Condensation::IsSingleMin() const {
 	int minCount = 0;
 	for (size_t i = 0; i < condensation.size(); ++i) {
-		if (condensation[i].size() == 0)
+		if (condensation[i] == 0)
 			++minCount;
 	}
 	return minCount <= 1;
@@ -18,7 +18,7 @@ int Condensation::GetMinComponentIndex() {
 		return minComponentIndex;
 
 	for (size_t i = 0; i < condensation.size(); ++i) {
-		if (condensation[i].size() == 0)
+		if (condensation[i] == 0)
 			minComponentIndex = i;
 	}
 

@@ -1,15 +1,15 @@
 ﻿#include "CondensationBuilder.h"
+#include "MultiListGraph.h"
 
 CondensationBuilder::CondensationBuilder() {}
 namespace{
-	Graph BuildInvertedGraph(const Graph& graph, const std::vector<int>& letters) {
-		Graph invertedGraph;
+	MultiListGraph BuildInvertedGraph(const Graph& graph, const std::vector<int>& letters) {
+		MultiListGraph invertedGraph(graph.size(), graph.size() * letters.size());
 
-		invertedGraph.resize(graph.size());
 		for (size_t i = 0; i < graph.size(); ++i) {
 			for (size_t j = 0; j < letters.size(); ++j) {
 				int letter = letters[j];
-				invertedGraph[graph[i][letter]].push_back(i);
+				invertedGraph.AddEdge(graph[i][letter], i);
 			}
 		}
 
@@ -30,12 +30,13 @@ namespace{
 		order[currentOrderSize++] = v;
 	}
 
-	void ClusterDfs(const Graph& graph, int v, std::vector<bool>& used, std::vector<int>& cluster, int clusterNumber) {
+	void ClusterDfs(const MultiListGraph& graph, int v, std::vector<bool>& used, std::vector<int>& cluster, int clusterNumber) {
 		used[v] = true;
 		cluster[v] = clusterNumber;
 
-		for (size_t i = 0; i < graph[v].size(); ++i) {
-			int to = graph[v][i];
+		for (auto it = graph.GetVertexAdjacencyListBegin(v); it != graph.GetVertexAdjacencyListEnd(); ++it)
+		{
+			int to = *it;
 
 			if (used[to])
 				continue;
@@ -51,7 +52,7 @@ CondensationBuilder& CondensationBuilder::GetInstance() {
 }
 
 Condensation CondensationBuilder::BuildCondensation(const Graph& graph, const std::vector<int>& letters) const {
-	Graph condensation;
+	std::vector<int> condensation;
 	auto n = graph.size();
 	std::vector<int> order(n);
 	std::vector<bool> used;
@@ -84,7 +85,7 @@ Condensation CondensationBuilder::BuildCondensation(const Graph& graph, const st
 			if (cluster[v] == cluster[to])
 				continue;
 
-			condensation[cluster[v]].push_back(cluster[to]);
+			++condensation[cluster[v]];
 		}
 	}
 

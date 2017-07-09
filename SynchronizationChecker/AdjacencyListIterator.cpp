@@ -1,6 +1,6 @@
 ﻿#include "AdjacencyListIterator.h"
 
-AdjacencyListIterator::AdjacencyListIterator(MultiListGraph* graph, int listPtr): graph(graph), listPtr(listPtr)
+AdjacencyListIterator::AdjacencyListIterator(const MultiListGraph* graph, int listPtr): graph(graph), listPtr(listPtr)
 {
 }
 
@@ -14,7 +14,7 @@ AdjacencyListIterator& AdjacencyListIterator::operator++()
 	return *this;
 }
 
-std::iterator<std::input_iterator_tag, int>::reference AdjacencyListIterator::operator*() const
+AdjacencyListIterator::value_type AdjacencyListIterator::operator*() const
 {
 	return graph->multiList[listPtr];
 }

@@ -65,9 +65,9 @@ namespace {
 	}
 
 	std::vector<int> MoveSetByLetter(const Graph& graph, const std::vector<int>& states, int letter) {
-		std::vector<int> ans;
+		std::vector<int> ans(states.size());
 		for (size_t i = 0; i < states.size(); ++i) {
-			ans.push_back(graph[states[i]][letter]);
+			ans[i] = graph[states[i]][letter];
 		}
 
 		return ans;

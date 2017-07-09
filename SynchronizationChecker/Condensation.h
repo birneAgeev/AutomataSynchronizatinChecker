@@ -1,16 +1,15 @@
 ﻿#pragma once
 #include <vector>
-#include "TypesDeclarations.h"
 
 class Condensation {
 public:
-	Graph condensation;
+	std::vector<int> condensation;
 	std::vector<int> initialVerticiesColoring;
 private:
 	int minComponentIndex;
 
 public:
-	Condensation(const Graph& condensation, const std::vector<int>& initialVerticiesColoring);
+	Condensation(const std::vector<int>& condensation, const std::vector<int>& initialVerticiesColoring);
 
 	bool IsSingleMin() const;
 

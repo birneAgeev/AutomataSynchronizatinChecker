@@ -15,12 +15,12 @@ void MultiListGraph::AddEdge(int v, int to)
 	last[v] = listPtr++;
 }
 
-AdjacencyListIterator MultiListGraph::GetVertexAdjacencyListBegin(int v)
+AdjacencyListIterator MultiListGraph::GetVertexAdjacencyListBegin(int v) const
 {
 	return AdjacencyListIterator(this, last[v]);
 }
 
-AdjacencyListIterator MultiListGraph::GetVertexAdjacencyListEnd()
+AdjacencyListIterator MultiListGraph::GetVertexAdjacencyListEnd() const
 {
 	return AdjacencyListIterator(this, -1);
 }

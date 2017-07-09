@@ -4,9 +4,10 @@
 namespace {
 	template <typename T>
 	std::vector<T> SetToVector(const std::set<T>& a) {
-		std::vector<T> ans;
+		std::vector<T> ans(a.size());
+		int ptr = 0;
 		for (const auto& entry : a)
-			ans.push_back(entry);
+			ans[ptr++] = entry;
 
 		return ans;
 	}
