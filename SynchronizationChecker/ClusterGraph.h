@@ -1,16 +1,19 @@
 ﻿#pragma once
 #include <vector>
 #include "ClusterStructure.h"
+#include "MultiListGraph.h"
 
 class ClusterGraph {
 	struct ClusterGraphEdge {
 		int toCluster;
 		int fromVertex, toVertex;
 
+		ClusterGraphEdge();
 		ClusterGraphEdge(int toCluster, int fromVertex, int toVertex);
 	};
 
-	std::vector<std::vector<ClusterGraphEdge>> adjacencyList;
+	MultiListGraph<ClusterGraphEdge> adjacencyList;
+//	std::vector<std::vector<ClusterGraphEdge>> adjacencyList;
 	ClusterStructure clusterStructure;
 	std::vector<AutomataStatesPair> stablePairs;
 

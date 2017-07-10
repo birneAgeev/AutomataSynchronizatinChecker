@@ -2,6 +2,7 @@
 #include "AutomataStatesPair.h"
 #include "Condensation.h"
 #include "MultiListGraph.h"
+#include "AdjacencyListIterator.h"
 
 class ClusterStructure {
 public:
@@ -13,7 +14,7 @@ private:
 	std::vector<ClusterInfo> clusterInfos;
 	int clusterCount;
 	std::vector<int> singleLetterGraph;
-	MultiListGraph invertedSingleLetterGraph;
+	MultiListGraph<int> invertedSingleLetterGraph;
 
 	int highestTreeRootCyclePredecessor;
 	int highestTreeRoot;

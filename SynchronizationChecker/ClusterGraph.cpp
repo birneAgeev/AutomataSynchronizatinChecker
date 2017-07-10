@@ -1,19 +1,23 @@
 ﻿#include "ClusterGraph.h"
 #include "Utils.h"
 
+ClusterGraph::ClusterGraphEdge::ClusterGraphEdge(): toCluster(0), fromVertex(0), toVertex(0)
+{
+}
+
 ClusterGraph::ClusterGraphEdge::ClusterGraphEdge(int toCluster, int fromVertex, int toVertex): toCluster(toCluster), fromVertex(fromVertex), toVertex(toVertex) { }
 
 void ClusterGraph::dfs(int v, std::vector<int>& coloring, std::vector<bool>& used, int d) {
 	used[v] = true;
 
-	for (size_t i = 0; i < adjacencyList[v].size(); ++i) {
-		int to = adjacencyList[v][i].toCluster;
+	for (auto it = adjacencyList.GetVertexAdjacencyListBegin(v); it != adjacencyList.GetVertexAdjacencyListEnd(); ++it) {
+		int to = (*it).toCluster;
 
 		if (used[to])
 			continue;
 
-		int p = adjacencyList[v][i].fromVertex;
-		int q = adjacencyList[v][i].toVertex;
+		int p = (*it).fromVertex;
+		int q = (*it).toVertex;
 
 		int pHeght = clusterStructure.GetVertexInfos()[p].height;
 		int qHeight = clusterStructure.GetVertexInfos()[q].height;
@@ -23,8 +27,8 @@ void ClusterGraph::dfs(int v, std::vector<int>& coloring, std::vector<bool>& use
 	}
 }
 
-ClusterGraph::ClusterGraph(const ClusterStructure& clusterStructure, const std::vector<AutomataStatesPair>& stablePairs): clusterStructure(clusterStructure), stablePairs(stablePairs) {
-	adjacencyList.resize(clusterStructure.GetClusterCount());
+ClusterGraph::ClusterGraph(const ClusterStructure& clusterStructure, const std::vector<AutomataStatesPair>& stablePairs): adjacencyList(0, 0), clusterStructure(clusterStructure), stablePairs(stablePairs) {
+	adjacencyList = MultiListGraph<ClusterGraphEdge>(clusterStructure.GetClusterCount(), 2*stablePairs.size());
 
 	for (size_t i = 0; i < stablePairs.size(); ++i) {
 		auto stablePair = stablePairs[i];
@@ -34,8 +38,8 @@ ClusterGraph::ClusterGraph(const ClusterStructure& clusterStructure, const std::
 		if (!clusterStructure.IsBigCluster(pCluster) || !clusterStructure.IsBigCluster(qCluster))
 			continue;
 
-		adjacencyList[pCluster].push_back(ClusterGraphEdge(qCluster, stablePair.GetP(), stablePair.GetQ()));
-		adjacencyList[qCluster].push_back(ClusterGraphEdge(pCluster, stablePair.GetQ(), stablePair.GetP()));
+		adjacencyList.AddEdge(pCluster, ClusterGraphEdge(qCluster, stablePair.GetP(), stablePair.GetQ()));
+		adjacencyList.AddEdge(qCluster, ClusterGraphEdge(pCluster, stablePair.GetQ(), stablePair.GetP()));
 	}
 }
 
@@ -48,7 +52,7 @@ bool ClusterGraph::IsColoringExists() {
 	if (d == 1)
 		return false;
 
-	auto n = adjacencyList.size();
+	auto n = adjacencyList.GetVerticesCount();
 
 	std::vector<int> coloring;
 	std::vector<bool> used;

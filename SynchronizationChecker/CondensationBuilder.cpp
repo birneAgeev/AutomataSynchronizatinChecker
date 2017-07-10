@@ -1,10 +1,11 @@
 ﻿#include "CondensationBuilder.h"
 #include "MultiListGraph.h"
+#include "AdjacencyListIterator.h"
 
 CondensationBuilder::CondensationBuilder() {}
 namespace{
-	MultiListGraph BuildInvertedGraph(const Graph& graph, const std::vector<int>& letters) {
-		MultiListGraph invertedGraph(graph.size(), graph.size() * letters.size());
+	MultiListGraph<int> BuildInvertedGraph(const Graph& graph, const std::vector<int>& letters) {
+		MultiListGraph<int> invertedGraph(graph.size(), graph.size() * letters.size());
 
 		for (size_t i = 0; i < graph.size(); ++i) {
 			for (size_t j = 0; j < letters.size(); ++j) {
@@ -30,7 +31,7 @@ namespace{
 		order[currentOrderSize++] = v;
 	}
 
-	void ClusterDfs(const MultiListGraph& graph, int v, std::vector<bool>& used, std::vector<int>& cluster, int clusterNumber) {
+	void ClusterDfs(const MultiListGraph<int>& graph, int v, std::vector<bool>& used, std::vector<int>& cluster, int clusterNumber) {
 		used[v] = true;
 		cluster[v] = clusterNumber;
 

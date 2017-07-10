@@ -1,10 +1,11 @@
 ﻿#include "SlowSynchronizationChecker.h"
 #include "MultiListGraph.h"
+#include "AdjacencyListIterator.h"
 
 namespace {
-	MultiListGraph BuildInvertedSquaredAutomaton(const Graph& graph, int sigma) {
+	MultiListGraph<int> BuildInvertedSquaredAutomaton(const Graph& graph, int sigma) {
 		auto n = graph.size();
-		MultiListGraph invertedSquaredAutomaton(n * n, n * n * sigma);
+		MultiListGraph<int> invertedSquaredAutomaton(n * n, n * n * sigma);
 
 		for (size_t i = 0; i < n; ++i) {
 			for (size_t j = 0; j < n; ++j) {

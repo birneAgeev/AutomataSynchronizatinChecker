@@ -46,7 +46,7 @@ ClusterStructure::ClusterStructure() : invertedSingleLetterGraph(0, 0){
 ClusterStructure::ClusterStructure(const Graph& graph, int letter) : invertedSingleLetterGraph(graph.size(), graph.size()) {
 	auto n = graph.size();
 	singleLetterGraph.resize(n);
-	invertedSingleLetterGraph = MultiListGraph(n, n);
+	invertedSingleLetterGraph = MultiListGraph<int>(n, n);
 	vertexInfos.resize(n);
 
 	highestTreeHeight = -1;

@@ -154,14 +154,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AdjacencyListIterator.cpp" />
     <ClCompile Include="AutomataStatesPair.cpp" />
     <ClCompile Include="ClusterGraph.cpp" />
     <ClCompile Include="ClusterStructure.cpp" />
     <ClCompile Include="Condensation.cpp" />
     <ClCompile Include="CondensationBuilder.cpp" />
     <ClCompile Include="FastSynchronizationChecker.cpp" />
-    <ClCompile Include="MultiListGraph.cpp" />
     <ClCompile Include="SlowSynchronizationChecker.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="StablePairsSets.cpp" />

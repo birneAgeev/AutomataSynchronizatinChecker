@@ -1,22 +1,47 @@
 ﻿#pragma once
 #include <vector>
-#include "AdjacencyListIterator.h"
 
+template<typename T>
+class AdjacencyListIterator;
+
+template <typename TData>
 class MultiListGraph
 {
-	friend class AdjacencyListIterator;
-	std::vector<int> multiList;
+public:
+	friend class AdjacencyListIterator<TData>;
+	std::vector<TData> multiList;
 	std::vector<int> previous;
 	std::vector<int> last;
 	int listPtr;
 
 public:
-	MultiListGraph(int n, int m);
+	MultiListGraph(int n, int m)
+	{
+		multiList.resize(m);
+		previous.assign(m, -1);
+		last.assign(n, -1);
+		listPtr = 0;
+	}
 
-	void AddEdge(int v, int to);
+	void AddEdge(int v, TData edgeInfo)
+	{
+		multiList[listPtr] = edgeInfo;
+		previous[listPtr] = last[v];
+		last[v] = listPtr++;
+	}
 
-	AdjacencyListIterator GetVertexAdjacencyListBegin(int v) const;
+	AdjacencyListIterator<TData> GetVertexAdjacencyListBegin(int v) const
+	{
+		return AdjacencyListIterator<TData>(this, last[v]);
+	}
 
-	AdjacencyListIterator GetVertexAdjacencyListEnd() const;
+	AdjacencyListIterator<TData> GetVertexAdjacencyListEnd() const
+	{
+		return AdjacencyListIterator<TData>(this, -1);
+	}
+
+	int GetVerticesCount()
+	{
+		return last.size();
+	}
 };
-

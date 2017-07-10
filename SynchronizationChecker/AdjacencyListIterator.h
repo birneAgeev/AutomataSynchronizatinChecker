@@ -2,22 +2,42 @@
 #include <iterator>
 #include "MultiListGraph.h"
 
-class AdjacencyListIterator : public std::iterator<std::input_iterator_tag, int>
+template <typename TData>
+class AdjacencyListIterator : public std::iterator<std::input_iterator_tag, TData>
 {
-	friend class MultiListGraph;
-	AdjacencyListIterator(const MultiListGraph* graph, int listPtr);
+	friend class MultiListGraph<TData>;
+
+	AdjacencyListIterator(const MultiListGraph<TData>* graph, int listPtr) : graph(graph), listPtr(listPtr)
+	{
+	}
+
 public:
-	AdjacencyListIterator(const AdjacencyListIterator& iterator);
+	AdjacencyListIterator(const AdjacencyListIterator<TData>& iterator) : graph(iterator.graph), listPtr(iterator.listPtr)
+	{
+	}
 
-	AdjacencyListIterator& operator++();
+	AdjacencyListIterator<TData>& operator++()
+	{
+		listPtr = graph->previous[listPtr];
+		return *this;
+	}
 
-	value_type operator*() const;
+	TData operator*() const
+	{
+		return graph->multiList[listPtr];
+	}
 
-	bool operator ==(const AdjacencyListIterator& other) const;
+	bool operator ==(const AdjacencyListIterator<TData>& other) const
+	{
+		return graph == other.graph && listPtr == other.listPtr;
+	}
 
-	bool operator !=(const AdjacencyListIterator& other) const;
+	bool operator !=(const AdjacencyListIterator<TData>& other) const
+	{
+		return !(*this == other);
+	}
 
 private:
-	const MultiListGraph* graph;
+	const MultiListGraph<TData>* graph;
 	int listPtr;
 };
