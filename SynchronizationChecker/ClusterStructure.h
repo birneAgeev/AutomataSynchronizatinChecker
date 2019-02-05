@@ -54,6 +54,8 @@ public:
 
 	const std::vector<ClusterInfo>& GetClusterInfos() const;
 
+	const std::vector<int>& GetSingleLetterGraph() const;
+
 	int GetClusterCount() const;
 
 	bool IsSingleHighestTree() const;

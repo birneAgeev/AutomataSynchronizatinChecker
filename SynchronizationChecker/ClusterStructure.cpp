@@ -146,6 +146,10 @@ int ClusterStructure::GetClusterCount() const {
 	return clusterCount;
 }
 
+const std::vector<int>& ClusterStructure::GetSingleLetterGraph() const {
+	return singleLetterGraph;
+}
+
 bool ClusterStructure::IsSingleHighestTree() const {
 	return highestTreeHeight != secondHighestTreeHeight;
 }

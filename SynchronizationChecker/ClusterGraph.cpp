@@ -19,12 +19,28 @@ void ClusterGraph::dfs(int v, std::vector<int>& coloring, std::vector<bool>& use
 		int p = (*it).fromVertex;
 		int q = (*it).toVertex;
 
-		int pHeght = clusterStructure.GetVertexInfos()[p].height;
-		int qHeight = clusterStructure.GetVertexInfos()[q].height;
+		int pHeght = levels[p];
+		int qHeight = levels[q];
 
 		coloring[to] = ((qHeight - pHeght + coloring[v]) % d + d) % d;
 		dfs(to, coloring, used, d);
 	}
+}
+
+int GetLevel(int v, const ClusterStructure& clusterStructure, std::vector<int>& levels) {
+	if (levels[v] != -1)
+		return levels[v];
+
+	auto vCluster = clusterStructure.GetVertexInfos()[v].clusterIndex;
+	auto pivotVertex = clusterStructure.GetClusterInfos()[vCluster].cycleStates.front();
+	int level = 0;
+	if (v == pivotVertex)
+		level = 0;
+	else
+		level = GetLevel(clusterStructure.GetSingleLetterGraph()[v], clusterStructure, levels) + 1;
+
+	levels[v] = level;
+	return level;
 }
 
 ClusterGraph::ClusterGraph(const ClusterStructure& clusterStructure, const std::vector<AutomataStatesPair>& stablePairs): adjacencyList(0, 0), clusterStructure(clusterStructure), stablePairs(stablePairs) {
@@ -41,6 +57,12 @@ ClusterGraph::ClusterGraph(const ClusterStructure& clusterStructure, const std::
 		adjacencyList.AddEdge(pCluster, ClusterGraphEdge(qCluster, stablePair.GetP(), stablePair.GetQ()));
 		adjacencyList.AddEdge(qCluster, ClusterGraphEdge(pCluster, stablePair.GetQ(), stablePair.GetP()));
 	}
+
+	size_t n = clusterStructure.GetSingleLetterGraph().size();
+	levels = std::vector<int>(n, -1);
+	for (size_t i = 0; i < n; ++i) {
+		levels[i] = GetLevel(i, clusterStructure, levels);
+	}
 }
 
 bool ClusterGraph::IsColoringExists() {
@@ -48,9 +70,6 @@ bool ClusterGraph::IsColoringExists() {
 	for (int i = 1; i < clusterStructure.GetClusterCount(); ++i) {
 		d = Utils::GreatestCommonDivisor(d, int(clusterStructure.GetClusterInfos()[i].cycleLength));
 	}
-
-	if (d == 1)
-		return false;
 
 	auto n = adjacencyList.GetVerticesCount();
 
@@ -64,21 +83,23 @@ bool ClusterGraph::IsColoringExists() {
 
 	for (size_t i = 0; i < n; ++i) {
 		if (!used[i])
-			return false;
+			return true;
 	}
+
+	if (d == 1)
+		return false;
 
 	for (size_t i = 0; i < stablePairs.size(); ++i) {
 		int p = stablePairs[i].GetP();
 		int q = stablePairs[i].GetQ();
 
-		int pHeght = clusterStructure.GetVertexInfos()[p].height;
-		int qHeight = clusterStructure.GetVertexInfos()[q].height;
+		int pHeght = levels[p];
+		int qHeight = levels[q];
 		int pCluster = clusterStructure.GetVertexInfos()[p].clusterIndex;
 		int qCluster = clusterStructure.GetVertexInfos()[q].clusterIndex;
 
-		if ((pHeght - qHeight - coloring[pCluster] + coloring[qCluster]) % d != 0)
-			return false;
+		d = Utils::GreatestCommonDivisor(d, pHeght - qHeight - coloring[pCluster] + coloring[qCluster]);
 	}
 
-	return true;
+	return d != 1;
 }
