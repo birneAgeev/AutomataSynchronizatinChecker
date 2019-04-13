@@ -66,24 +66,48 @@ ClusterGraph::ClusterGraph(const ClusterStructure& clusterStructure, const std::
 }
 
 bool ClusterGraph::IsColoringExists() {
-	int d = int(clusterStructure.GetClusterInfos().front().cycleLength);
-	for (int i = 1; i < clusterStructure.GetClusterCount(); ++i) {
-		d = Utils::GreatestCommonDivisor(d, int(clusterStructure.GetClusterInfos()[i].cycleLength));
+	int d = -1;
+	for (int i = 0; i < clusterStructure.GetClusterCount(); ++i) {
+		if (clusterStructure.IsBigCluster(i)) {
+			d = int(clusterStructure.GetClusterInfos()[i].cycleLength);
+			break;
+		}
+	}
+	int bigClusterCount = 0;
+	for (int i = 0; i < clusterStructure.GetClusterCount(); ++i) {
+		if (clusterStructure.IsBigCluster(i)) {
+			d = Utils::GreatestCommonDivisor(d, int(clusterStructure.GetClusterInfos()[i].cycleLength));
+			++bigClusterCount;
+		}
+	}
+
+	if (d == -1) {
+		return false;
 	}
 
 	auto n = adjacencyList.GetVerticesCount();
+
+	int startCluster = 0;
+	for (int i = 0; i < clusterStructure.GetClusterCount(); ++i) {
+		if (clusterStructure.IsBigCluster(i)) {
+			startCluster = i;
+			break;
+		}
+	}
+
 
 	std::vector<int> coloring;
 	std::vector<bool> used;
 	coloring.assign(n, -1);
 	used.assign(n, false);
-	coloring[0] = 0;
+	coloring[startCluster] = 0;
 
-	dfs(0, coloring, used, d);
+	dfs(startCluster, coloring, used, d);
 
 	for (size_t i = 0; i < n; ++i) {
-		if (!used[i])
+		if (clusterStructure.IsBigCluster(i) && !used[i]) {
 			return true;
+		}
 	}
 
 	if (d == 1)
@@ -98,7 +122,7 @@ bool ClusterGraph::IsColoringExists() {
 		int pCluster = clusterStructure.GetVertexInfos()[p].clusterIndex;
 		int qCluster = clusterStructure.GetVertexInfos()[q].clusterIndex;
 
-		d = Utils::GreatestCommonDivisor(d, pHeght - qHeight - coloring[pCluster] + coloring[qCluster]);
+		d = Utils::GreatestCommonDivisor(d, abs(pHeght - qHeight - coloring[pCluster] + coloring[qCluster]));
 	}
 
 	return d != 1;

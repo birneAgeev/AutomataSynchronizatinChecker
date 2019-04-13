@@ -197,7 +197,19 @@ FastSynchrinizationTestResult FastSynchronizationChecker::IsSynchronizableFast(c
 		int letter = letters[i];
 		auto clusterStructure = clusterStructures[i];
 		auto stablePairs = stablePairsSets.GetStablePairs(letter);
-		auto clusterGraph = ClusterGraph(clusterStructure, stablePairs);
+
+		auto goodStablePairs = std::vector<AutomataStatesPair>();
+		for (const auto &stablePair : stablePairs) {
+			int p = stablePair.GetP();
+			int q = stablePair.GetQ();
+			int pCluster = clusterStructure.GetVertexInfos()[p].clusterIndex;
+			int qCluster = clusterStructure.GetVertexInfos()[q].clusterIndex;
+
+			if (clusterStructure.IsBigCluster(pCluster) && clusterStructure.IsBigCluster(qCluster))
+				goodStablePairs.push_back(stablePair);
+		}
+
+		auto clusterGraph = ClusterGraph(clusterStructure, goodStablePairs);
 
 		if (clusterGraph.IsColoringExists())
 			return FastSynchrinizationTestResult::DontKnow;
